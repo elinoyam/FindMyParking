@@ -199,9 +199,5 @@ def main():
     except:
         print("Error from main createDB")
         exit
-        
-def calculate_each_node_probability():
-    my_conn.execute(f'''UPDATE parking_data SET probability = (free_count / (free_count + occupied_count))''')
 
 #main()
-#calculate_each_node_probability() 
