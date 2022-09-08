@@ -22,7 +22,7 @@ def get_nodes_in_radius(lat, long, raduis = 100):
 def db_connection(db_file):
     # Create a SQL connection to our SQLite database
     try:
-        con = sqlite3.connect("parking_db.db")
+        con = sqlite3.connect("my_db.db")
         cur = con.cursor()
         return cur
     except:
