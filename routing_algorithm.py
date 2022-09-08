@@ -16,8 +16,8 @@ def get_nodes_in_radius(lat, long, raduis = 100):
         api = overpy.Overpass()
         result = api.query("[out:json];node(around:{}, {}, {});out;".format(raduis,lat, long))
         return tuple(result._nodes.keys())
-    except overpy.exception as err:
-        print("Query API ERROR:", err)
+    except:
+        print("Query API ERR")
 
 def db_connection(db_file):
     # Create a SQL connection to our SQLite database
@@ -26,7 +26,7 @@ def db_connection(db_file):
         cur = con.cursor()
         return cur
     except:
-        print("Connect DB ERROR")
+        print("Connect DB ERR")
 
 def close_db_connection(db):
     db.close()
@@ -81,5 +81,3 @@ def test():
     result_url = route_to_parking(cord1[0], cord1[1] ,cord2[0], cord2[1])
     print(result_url) #change it to open the URL
     #instead of test we need to receive the data from user!
-
-test()
