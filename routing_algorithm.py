@@ -2,31 +2,25 @@ import sqlite3
 import overpy
 import requests
 import json
+import webbrowser
 
-"""
-TODO 
-    Exception and handle with edge case
-    Naming convention
-EXTRA
-    Convert address to coordiantes
-"""
 
 def get_nodes_in_radius(lat, long, raduis = 100):
     try:
         api = overpy.Overpass()
         result = api.query("[out:json];node(around:{}, {}, {});out;".format(raduis,lat, long))
         return tuple(result._nodes.keys())
-    except:
-        print("Query API ERR")
+    except overpy.exception as err:
+        print("Query API ERROR:", err)
 
 def db_connection(db_file):
     # Create a SQL connection to our SQLite database
     try:
-        con = sqlite3.connect("my_db.db")
+        con = sqlite3.connect("parking_db.db")
         cur = con.cursor()
         return cur
     except:
-        print("Connect DB ERR")
+        print("Connect DB ERROR")
 
 def close_db_connection(db):
     db.close()
@@ -36,7 +30,7 @@ route_to_parking algorithem is creating a URL link of Waze route from origin loc
 """
 def route_to_parking(lat_source, lon_source ,lat_destination , lon_destination ):
     try:
-        db = db_connection("my_db.db")
+        db = db_connection("parking_db.db")
         db_nodes_string = get_nodes_in_radius(lat_destination, lon_destination)
         query = f"SELECT node_id FROM parking_data WHERE node_id = (SELECT node_id FROM parking_data where node_id in {db_nodes_string} ORDER BY probability DESC LIMIT 1);"
         max_prob_node = db.execute(query)
@@ -75,9 +69,17 @@ def get_first_latlon_of_node(request_url):
                 return (row['lat'] , row['lon'])
         return nodes_list[0]['lat'], nodes_list[0]['lon']
 
-def test():
-    cord1 = [52.536535, 13.3939797]
-    cord2 = [52.5380103 , 13.3982403]
-    result_url = route_to_parking(cord1[0], cord1[1] ,cord2[0], cord2[1])
-    print(result_url) #change it to open the URL
-    #instead of test we need to receive the data from user!
+def main():
+    cord1_lat= float(input("Please enter source latitude:"))
+    cord1_lon= float(input("Please enter source longtitude:"))
+
+    cord2_lat= float(input("Please enter destingation latitude:"))
+    cord2_lon= float(input("Please enter destination longtitude:"))
+
+    # cord1 = [52.536535, 13.3939797]
+    # cord2 = [52.5380103 , 13.3982403]
+    result_url = str(route_to_parking(cord1_lat, cord1_lon, cord2_lat, cord2_lon))
+    chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+    webbrowser.get(chrome_path).open(result_url)
+
+main()
