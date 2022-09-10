@@ -148,11 +148,13 @@ def save_data_to_db(empty_count, occupied_count):
         for node, count in empty_count.items():
             res = my_conn.execute(f'''select * from parking_data where node_id = {node}''').first()
             if not res:
-                stmt = (insert(parking_data_table).values(node_id=node, free_count=count, occupied_count=0, probability=0))
+                stmt = (insert(parking_data_table).values(node_id=node, free_count=count, occupied_count=0, probability=1))
             else:
                 existing_count = res['free_count']
+                total_count= existing_count + res['occupied_count'] + count
+                updated_prob= existing_count + count / total_count
                 stmt = (update(parking_data_table).where(parking_data_table.c.node_id == node).values(
-                    free_count=count + existing_count))
+                    free_count=count + existing_count, probability= updated_prob))
             my_conn.execute(stmt)
         # save all the occupied data
         for node, count in occupied_count.items():
@@ -161,8 +163,10 @@ def save_data_to_db(empty_count, occupied_count):
                 stmt = (insert(parking_data_table).values(node_id=node, free_count=0, occupied_count=count, probability=0))
             else:
                 existing_count = res['occupied_count']
+                total_count= existing_count + res['free_count'] + count
+                updated_prob= res['free_count']  / total_count
                 stmt = (update(parking_data_table).where(parking_data_table.c.node_id == node).values(
-                    occupied_count=count + existing_count))
+                    occupied_count=count + existing_count, probability= updated_prob))
             my_conn.execute(stmt)
     except:
         print("Saving Data to DB ERROR")
