@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Find My Parking</title>
+</head>
+<body>
+<h1>Find My Parking</h1>
+<form action="{{ url_for("main")}}" method="post">
+    <label for="cord1_lat">cord1_lat:</label>
+    <input type="text" id="cord1_lat" name="cord1_lat" placeholder="cord1_lat">
+    <label for="cord1_lon">cord1_lon:</label>
+    <input type="text" id="cord1_lon" name="cord1_lon" placeholder="cord1_lon">
+    <label for="cord2_lat">cord1_lat:</label>
+    <input type="text" id="cord2_lat" name="cord2_lat" placeholder="cord2_lat">
+    <label for="cord1_lon">cord1_lon:</label>
+    <input type="text" id="cord2_lon" name="cord2_lon" placeholder="cord2_lon">
+    <button type="submit" value="Submit">Get Parking</button>
+</body>
+</html>
