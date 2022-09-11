@@ -1,20 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Find My Parking</title>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <title>Find My Parking</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather&amp;family=Montserrat&amp;family=Sacramento&amp;display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </head>
 <body>
-<h1>Find My Parking</h1>
-<form action="{{ url_for("main")}}" method="post">
-    <label for="cord1_lat">cord1_lat:</label>
-    <input type="text" id="cord1_lat" name="cord1_lat" placeholder="cord1_lat">
-    <label for="cord1_lon">cord1_lon:</label>
-    <input type="text" id="cord1_lon" name="cord1_lon" placeholder="cord1_lon">
-    <label for="cord2_lat">cord1_lat:</label>
-    <input type="text" id="cord2_lat" name="cord2_lat" placeholder="cord2_lat">
-    <label for="cord1_lon">cord1_lon:</label>
-    <input type="text" id="cord2_lon" name="cord2_lon" placeholder="cord2_lon">
-    <button type="submit" value="Submit">Get Parking</button>
+  <form action="/" method="post" id="form">
+    <div class="container pagewrap">
+      <div class="row" style="width: 100%;">
+        <div class="col-sm-12" style="display: flex;">
+          <div class="col-sm-4" style="display: flex;">
+             <img src="./static/images/logo.jpg" class="" style="max-width: 300px;max-height: 300px;"><!--position: fixed; -->
+          </div>
+          <div class="col-sm-8" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start;">
+            <div class="col-sm-12" style="display: flex;">
+              <h3 class="form__title">Find My Parking</h3>
+            </div>
+            <div class="col-sm-12"><label class="source_label">Source</label></div><div class="col-sm-12" style="display: flex;">
+              <div class="col-sm-5">
+                <label id="cord1_lat" for="cord1_lat" class="container__label">Latitude:</label>
+                <input class="container__input" type="text" id="cord1_lat" name="cord1_lat" value="" required="">
+              </div>
+              <div class="col-sm-5">
+                <label id="cord1_lon" for="cord1_lon" class="container__label">Longitude:</label>
+                <input class="container__input" type="text" id="cord1_lon" name="cord1_lon" value="" required="">
+              </div>
+            </div>
+            <div class="col-sm-12"><label class="dest_label">Destination</label></div><div class="col-sm-12" style="display: flex;">
+              <div class="col-sm-6"> 
+                <label id="cord2_lat" for="cord2_lat" class="container__label">Latitude:</label>
+                <input class="container__input" type="text" id="cord2_lat" name="cord2_lat" value="" required="">
+              </div>
+              <div class="col-sm-6">
+                <label id="cord2_lon" for="cord2_lon" class="container__label">Longitude:</label>
+                <input class="container__input" type="text" id="cord2_lon" name="cord2_lon" value="" required="">
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="col-md-8">
+              </div>
+              <div class="col-md-4">
+                <button class="form__submit" id="submit" type="submit" value="Submit">Get Parking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 </body>
 </html>
