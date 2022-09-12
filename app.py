@@ -70,6 +70,15 @@ def get_first_latlon_of_node(request_url):
                 return (row['lat'] , row['lon'])
         return nodes_list[0]['lat'], nodes_list[0]['lon']
 
+
+def is_float(num):
+    try:
+        float(num)
+        return True
+    except ValueError:
+        return False
+
+
 app = Flask(__name__)
 
 @app.route('/', methods =["GET", "POST"])
@@ -78,22 +87,28 @@ def main():
     # cord2 = [52.5380103 , 13.3982403]
 
     if request.method == "POST":
-        cord1_lat = float(request.form.get('cord1_lat'))
-        cord1_lon = float(request.form.get('cord1_lon'))
-        cord2_lat = float(request.form.get('cord2_lat'))
-        cord2_lon = float(request.form.get('cord2_lon'))
+        cord1_lat = request.form.get('cord1_lat')
+        cord1_lon = request.form.get('cord1_lon')
+        cord2_lat = request.form.get('cord2_lat')
+        cord2_lon = request.form.get('cord2_lon')
         radius= request.form.get('radius')
         if radius:
             radius= float(radius)
         else:
             radius=100
-        result_url = str(route_to_parking(cord1_lat, cord1_lon, cord2_lat, cord2_lon, radius))
-        if result_url!= "None":
-            chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
-            print(result_url)
-            webbrowser.get(chrome_path).open(result_url)
+        if is_float(cord1_lat) and  is_float(cord1_lon) and is_float(cord2_lat) and is_float(cord2_lon):
+            cord1_lat = float(cord1_lat)
+            cord1_lon = float(cord1_lon)
+            cord2_lat = float(cord2_lat)
+            cord2_lon = float(cord2_lon)
+            result_url = str(route_to_parking(cord1_lat, cord1_lon, cord2_lat, cord2_lon, radius))
+            if result_url!= "None":
+                chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+                webbrowser.get(chrome_path).open(result_url)
+            else:
+                return render_template("form.html", error_msg= "BAD INPUT")
         else:
-            return render_template("form.html", error_msg= "BAD INPUT")
+             return render_template("form.html", error_msg= "BAD INPUT")
     return render_template("form.html", error_msg="")
 
 
