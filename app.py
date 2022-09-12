@@ -17,7 +17,7 @@ def get_nodes_in_radius(lat, long, raduis = 100):
 def db_connection(db_file):
     # Create a SQL connection to our SQLite database
     try:
-        con = sqlite3.connect("parking_db.db")
+        con = sqlite3.connect("Fixed_DB.db")
         cur = con.cursor()
         return cur
     except:
@@ -31,7 +31,7 @@ route_to_parking algorithem is creating a URL link of Waze route from origin loc
 """
 def route_to_parking(lat_source, lon_source ,lat_destination , lon_destination ):
     try:
-        db = db_connection("parking_db.db")
+        db = db_connection("Fixed_DB.db")
         db_nodes_string = get_nodes_in_radius(lat_destination, lon_destination)
         query = f"SELECT node_id FROM parking_data WHERE node_id = (SELECT node_id FROM parking_data where node_id in {db_nodes_string} ORDER BY probability DESC LIMIT 1);"
         max_prob_node = db.execute(query)
