@@ -3,13 +3,13 @@ import overpy
 import requests
 import json
 import webbrowser
-from flask import Flask, url_for, render_template, request
+from flask import Flask, url_for, render_template, request, redirect
 
 
-def get_nodes_in_radius(lat, long, raduis = 100):
+def get_nodes_in_radius(lat, long, radius):
     try:
         api = overpy.Overpass()
-        result = api.query("[out:json];node(around:{}, {}, {});out;".format(raduis,lat, long))
+        result = api.query("[out:json];node(around:{}, {}, {});out;".format(radius,lat, long))
         return tuple(result._nodes.keys())
     except overpy.exception as err:
         print("Query API ERROR:", err)
@@ -29,10 +29,10 @@ def close_db_connection(db):
 """
 route_to_parking algorithem is creating a URL link of Waze route from origin location to parking lot nearby destination location 
 """
-def route_to_parking(lat_source, lon_source ,lat_destination , lon_destination ):
+def route_to_parking(lat_source, lon_source ,lat_destination, lon_destination, radius):
     try:
         db = db_connection("Fixed_DB.db")
-        db_nodes_string = get_nodes_in_radius(lat_destination, lon_destination)
+        db_nodes_string = get_nodes_in_radius(lat_destination, lon_destination, radius)
         query = f"SELECT node_id FROM parking_data WHERE node_id = (SELECT node_id FROM parking_data where node_id in {db_nodes_string} ORDER BY probability DESC LIMIT 1);"
         max_prob_node = db.execute(query)
         max_prob_node = max_prob_node.fetchall()
@@ -46,7 +46,7 @@ def route_to_parking(lat_source, lon_source ,lat_destination , lon_destination )
         print(final_path)
         return final_path
     except:
-        exit
+        print("Bad Input")
 
 def get_first_latlon_of_node(request_url):
     try:
@@ -82,13 +82,20 @@ def main():
         cord1_lon = float(request.form.get('cord1_lon'))
         cord2_lat = float(request.form.get('cord2_lat'))
         cord2_lon = float(request.form.get('cord2_lon'))
+        radius= request.form.get('radius')
+        if radius:
+            radius= float(radius)
+        else:
+            radius=100
+        result_url = str(route_to_parking(cord1_lat, cord1_lon, cord2_lat, cord2_lon, radius))
+        if result_url!= "None":
+            chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+            print(result_url)
+            webbrowser.get(chrome_path).open(result_url)
+        else:
+            return render_template("form.html", error_msg= "BAD INPUT")
+    return render_template("form.html", error_msg="")
 
-        result_url = str(route_to_parking(cord1_lat, cord1_lon, cord2_lat, cord2_lon))
-        chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
-        print(result_url)
-        webbrowser.get(chrome_path).open(result_url)
-
-    return render_template("form.html")
 
 if __name__ == "__main__":
     app.run()
