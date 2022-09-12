@@ -45,7 +45,7 @@ def route_to_parking(lat_source, lon_source ,lat_destination, lon_destination, r
         close_db_connection(db)
         print(final_path)
         return final_path
-    except:
+    except Exception as e:
         print("Bad Input")
 
 def get_first_latlon_of_node(request_url):
@@ -78,6 +78,14 @@ def is_float(num):
     except ValueError:
         return False
 
+def is_valid_coord(lat, lon):
+    is_valid = False
+    lat = float(lat)
+    lon = float(lon)
+
+    if -90 <= lat and lat <= 90 and -180 <= lon and lon <= 180:
+        is_valid = True
+    return  is_valid
 
 app = Flask(__name__)
 
@@ -96,7 +104,8 @@ def main():
             radius= float(radius)
         else:
             radius=100
-        if is_float(cord1_lat) and  is_float(cord1_lon) and is_float(cord2_lat) and is_float(cord2_lon):
+        if is_float(cord1_lat) and is_float(cord1_lon) and is_float(cord2_lat) and is_float(cord2_lon) \
+                and is_valid_coord(cord1_lat, cord1_lon):
             cord1_lat = float(cord1_lat)
             cord1_lon = float(cord1_lon)
             cord2_lat = float(cord2_lat)
