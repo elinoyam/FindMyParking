@@ -4,10 +4,11 @@
   <link rel="stylesheet" href="../static/css/styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Merriweather&amp;family=Montserrat&amp;family=Sacramento&amp;display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="index.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </head>
 <body>
-  <form action="/" method="post" id="form">
+  <form action="/" method="post" id="form" onsubmit="this.submit(); this.reset(); return false;">
     <div class="container pagewrap">
       <div class="row" style="width: 100%;">
         <div class="col-sm-12" style="display: flex;">
@@ -40,8 +41,15 @@
                 <input class="form-control" type="text" id="cord2_lon" name="cord2_lon" value="" required="">
               </div>
             </div>
+            <div class="col-sm-12"><label class="dest_label coordinates_label">Radius</label></div>
+            <div class="col-sm-12 coord_row">
+              <div class="col-sm-6 coord_box"> 
+                <input class="form-control" type="text" id="radius" name="radius" value="">
+              </div>
+            </div>
             <div class="col-sm-12 submit_button_div">
               <div class="col-md-8">
+                <h6 style="color: red;">{{error_msg}}</h6>
               </div>
               <div class="col-md-4">
                 <button class="form__submit button-81" id="submit" type="submit" value="Submit">Get Parking</button>
